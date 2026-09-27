@@ -35,10 +35,10 @@ Evaluated on **20 held-out pairs of the NTIRE 2025 Low-Light Image Enhancement t
 |---|---:|---:|
 | Zero-DCE network, supervised (full-res convolutions, no scene context) | 20.91 | 0.717 |
 | Curve grid only (global branch, no refiner) | 22.85 | 0.768 |
-| NAFNet refiner only (no global branch) | *training* | |
+| NAFNet refiner only (no global branch) | 22.85 | 0.833 |
 | Full LumiGrid | 24.57 | 0.840 |
 
-The same data and loss take the original Zero-DCE network from 19.00 to 20.91 dB; predicting the curves from scene context as a luminance-guided grid adds another 1.9 dB, and the local refiner adds 1.7 dB and most of the SSIM gain (noise removal).
+The same data and loss take the original Zero-DCE network from 19.00 to 20.91 dB; predicting the curves from scene context as a luminance-guided grid adds another 1.9 dB, and the local refiner adds 1.7 dB and most of the SSIM gain (noise removal). The two branches are complementary: on its own, the refiner reaches the same PSNR as the curve grid alone (22.85 dB) with much better structure (SSIM 0.833 vs 0.768), but it gets the overall brightness and colour wrong more often; giving it the grid's result as a starting point adds 1.7 dB.
 
 ## How it works
 
