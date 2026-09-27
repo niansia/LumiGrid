@@ -4,7 +4,9 @@
 
 LumiGrid brightens dark photos by predicting a small 3-D *bilateral grid of light-enhancement curves* from a thumbnail of the whole image, slicing it at full resolution, and then cleaning up noise and detail with a lightweight NAFNet refiner. It keeps the interpretable curve formulation of Zero-DCE, but learns it with supervision, gives it scene-level context, and lets different luminance layers of the same region follow different curves.
 
-![LumiGrid architecture](assets/architecture.svg)
+![LumiGrid architecture](assets/architecture.png)
+
+*(a) A grid encoder reads a 256×256 thumbnail and predicts a 16×16×8 bilateral grid of Zero-DCE curves and colour matrices (three of its eight luminance layers are drawn, coloured by the transform each cell actually predicts for this image); a pointwise guide network gives each pixel its luminance coordinate, the grid is sliced trilinearly at full resolution, and a NAFNet refiner adds a residual. (b) Slicing. (c) The composed curves learned for this image. (d) The NAFBlock used in the refiner. All thumbnails are real intermediate results of the released model. Vector version: [architecture.svg](assets/architecture.svg).*
 
 ![Input, the original course pipeline and LumiGrid on held-out test images](assets/compare.jpg)
 
@@ -45,7 +47,7 @@ The same data and loss take the original Zero-DCE network from 19.00 to 20.91 dB
 - 8 iterations of per-channel light-enhancement curves, `LE(x) = x + a·x·(1 − x)` (the Zero-DCE curve, which is monotonic and stays in [0, 1]), and
 - a 3×4 colour matrix that corrects colour casts after the curves.
 
-**2. Slicing at full resolution.** Every pixel reads its coefficients by trilinear interpolation at its (x, y) position and a *learned* luminance guide (a per-pixel MLP), then applies them. Because the grid is indexed by luminance as well as position, a bright lamp and the shadow next to it can follow different curves without halos, and the cost of the global branch does not grow with image size.
+**2. Slicing at full resolution.** Every pixel reads its coefficients by trilinear interpolation at its (x, y) position and a *learned* luminance guide (a per-pixel MLP), then applies them. Because the grid is indexed by luminance as well as position, a bright lamp and the shadow next to it *can* follow different curves, and the cost of the global branch does not grow with image size. In the released model the learned guide spans a fairly narrow band (≈0.46–0.54), so most of the variation it uses is spatial; widening that range (e.g. a guide regulariser) is an obvious next experiment.
 
 **3. Local refinement.** A 3-level NAFNet U-Net takes the input and the sliced result and predicts a residual that removes noise and restores texture. It runs on overlapping 1024×1024 tiles, so a 24-megapixel image fits in 8 GB.
 
