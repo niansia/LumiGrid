@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 430" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0d0b1d"/><stop offset="1" stop-color="#171230"/></linearGradient>
+    <linearGradient id="dark" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#15121f"/><stop offset="1" stop-color="#2a2033"/></linearGradient>
+    <linearGradient id="lit" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9fb8d8"/><stop offset="1" stop-color="#e9d6b8"/></linearGradient>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#8b7bff"/></marker>
+    <marker id="p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#ff5c9c"/></marker>
+  </defs>
+  <rect width="1200" height="430" rx="18" fill="url(#bg)"/>
+  <text x="40" y="44" fill="#eef0ff" font-size="20" font-weight="700">LumiGrid</text>
+  <text x="140" y="44" fill="#8d8aa8" font-size="14">luminance-guided curve grids + local refinement</text>
+
+  <!-- input -->
+  <rect x="40" y="150" width="150" height="100" rx="8" fill="url(#dark)" stroke="#3a3356"/>
+  <text x="115" y="275" fill="#cfcbe8" font-size="13" text-anchor="middle">low-light input</text>
+  <text x="115" y="293" fill="#8d8aa8" font-size="11" text-anchor="middle">any size, e.g. 6000×4000</text>
+
+  <!-- global branch -->
+  <path d="M190 180 C 230 180 230 110 262 110" fill="none" stroke="#8b7bff" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="265" y="80" width="62" height="62" rx="4" fill="url(#dark)" stroke="#8b7bff"/>
+  <text x="296" y="160" fill="#b9b3e6" font-size="11" text-anchor="middle">256² thumbnail</text>
+  <path d="M327 111 L 372 111" stroke="#8b7bff" stroke-width="2" marker-end="url(#a)"/>
+  <g fill="#241c55" stroke="#8b7bff">
+    <path d="M375 70 l30 12 v58 l-30 12z"/><path d="M412 82 l22 9 v42 l-22 9z"/><path d="M440 91 l16 6 v28 l-16 6z"/>
+  </g>
+  <text x="415" y="176" fill="#b9b3e6" font-size="11" text-anchor="middle">CNN (local + global context)</text>
+  <path d="M458 111 L 505 111" stroke="#8b7bff" stroke-width="2" marker-end="url(#a)"/>
+  <!-- 3D grid -->
+  <g stroke="#ff5c9c" stroke-opacity=".75" fill="none">
+    <path d="M510 80 h80 v62 h-80z"/><path d="M530 64 h80 v62 h-80z" stroke-opacity=".45"/>
+    <path d="M510 80 l20 -16 M590 80 l20 -16 M590 142 l20 -16 M510 142 l20 -16"/>
+    <path d="M536 80 v62 M563 80 v62 M510 101 h80 M510 121 h80" stroke-opacity=".35"/>
+  </g>
+  <text x="562" y="170" fill="#ff8fbd" font-size="12" text-anchor="middle" font-weight="600">bilateral curve grid</text>
+  <text x="562" y="186" fill="#8d8aa8" font-size="11" text-anchor="middle">16×16 space × 8 luminance bins</text>
+  <text x="562" y="201" fill="#8d8aa8" font-size="11" text-anchor="middle">8 Zero-DCE curves + 3×4 colour matrix / cell</text>
+
+  <!-- slice -->
+  <path d="M615 111 C 660 111 660 200 700 200" fill="none" stroke="#ff5c9c" stroke-width="2" marker-end="url(#p)"/>
+  <path d="M190 215 L 700 215" stroke="#4fe3ff" stroke-width="1.5" stroke-dasharray="5 5" marker-end="url(#a)"/>
+  <text x="440" y="236" fill="#4fe3ff" font-size="11" text-anchor="middle">full-resolution pixels + learned luminance guide</text>
+  <rect x="705" y="168" width="120" height="84" rx="10" fill="#1b1540" stroke="#ff5c9c"/>
+  <text x="765" y="203" fill="#eef0ff" font-size="13" text-anchor="middle" font-weight="600">slice</text>
+  <text x="765" y="222" fill="#8d8aa8" font-size="11" text-anchor="middle">trilinear lookup,</text>
+  <text x="765" y="237" fill="#8d8aa8" font-size="11" text-anchor="middle">apply curves + matrix</text>
+
+  <!-- local -->
+  <path d="M825 210 L 870 210" stroke="#8b7bff" stroke-width="2" marker-end="url(#a)"/>
+  <g fill="#1b1540" stroke="#8b7bff">
+    <path d="M875 160 h120 l-20 34 h-80z"/><path d="M895 198 h80 l-8 16 h-64z"/><path d="M903 218 h64 l8 16 h-80z"/><path d="M895 238 h80 l20 34 h-120z"/>
+  </g>
+  <text x="935" y="296" fill="#b9b3e6" font-size="12" text-anchor="middle" font-weight="600">NAFNet refiner</text>
+  <text x="935" y="312" fill="#8d8aa8" font-size="11" text-anchor="middle">denoise + detail, residual</text>
+  <path d="M1000 210 L 1040 210" stroke="#8b7bff" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="1045" y="160" width="130" height="100" rx="8" fill="url(#lit)"/>
+  <text x="1110" y="285" fill="#cfcbe8" font-size="13" text-anchor="middle">enhanced output</text>
+
+  <text x="40" y="380" fill="#8d8aa8" font-size="12">The global branch only ever sees a 256×256 thumbnail, so it costs the same at 0.5 MP or 24 MP and still captures scene-level exposure and colour cast.</text>
+  <text x="40" y="400" fill="#8d8aa8" font-size="12">The grid is sliced per pixel at full resolution, so edges between lamps and shadows keep separate curves; the refiner runs on overlapping tiles.</text>
+</svg>
