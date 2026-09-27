@@ -47,7 +47,9 @@ The same data and loss take the original Zero-DCE network from 19.00 to 20.91 dB
 - 8 iterations of per-channel light-enhancement curves, `LE(x) = x + a·x·(1 − x)` (the Zero-DCE curve, which is monotonic and stays in [0, 1]), and
 - a 3×4 colour matrix that corrects colour casts after the curves.
 
-**2. Slicing at full resolution.** Every pixel reads its coefficients by trilinear interpolation at its (x, y) position and a *learned* luminance guide (a per-pixel MLP), then applies them. Because the grid is indexed by luminance as well as position, a bright lamp and the shadow next to it *can* follow different curves, and the cost of the global branch does not grow with image size. In the released model the learned guide spans a fairly narrow band (≈0.46–0.54), so most of the variation it uses is spatial; widening that range (e.g. a guide regulariser) is an obvious next experiment.
+**2. Slicing at full resolution.** Every pixel reads its coefficients by trilinear interpolation at its (x, y) position and a *learned* luminance guide (a per-pixel MLP), then applies them. Because the grid is indexed by luminance as well as position, a bright lamp and the shadow next to it *can* follow different curves, and the cost of the global branch does not grow with image size. In the released model the learned guide spans a narrow band: over every pixel of the 20 test images it stays within 0.46–0.55, so 86% of pixels fall in the 4th of the 8 luminance bins and the rest in the 5th. Most of the variation the model uses is therefore spatial; widening that range (e.g. a guide regulariser) is an obvious next experiment.
+
+A browser version (both networks via ONNX Runtime Web, slicing in a WebGL shader) runs at [niansia.github.io/lab/lumigrid](https://niansia.github.io/lab/lumigrid/).
 
 **3. Local refinement.** A 3-level NAFNet U-Net takes the input and the sliced result and predicts a residual that removes noise and restores texture. It runs on overlapping 1024×1024 tiles, so a 24-megapixel image fits in 8 GB.
 
